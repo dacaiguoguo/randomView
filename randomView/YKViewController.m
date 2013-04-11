@@ -14,8 +14,8 @@ float getTextSizeWidth(NSString*text ,float aFontSize) {
     CGSize platFormsize =[platFormstr sizeWithFont:[UIFont systemFontOfSize:aFontSize] constrainedToSize:platFormconstraint lineBreakMode: NSLineBreakByCharWrapping ];
     return platFormsize.width;
 }
-NSArray *stringLengthArrayFor(NSArray* _arr);
-NSArray *stringLengthArrayFor(NSArray* _arr){
+NSArray *stringLengthArrayFor(NSArray* _arr,float aFontSize);
+NSArray *stringLengthArrayFor(NSArray* _arr,float aFontSize){
     NSMutableArray *lengthArray = [NSMutableArray array];;
     
     for (int i=0; i<_arr.count; i++) {
@@ -23,7 +23,7 @@ NSArray *stringLengthArrayFor(NSArray* _arr){
         float len = getTextSizeWidth(obj, 14)+10;
         [lengthArray addObject:[NSNumber numberWithFloat:len]];
     }
-    return _arr;
+    return lengthArray;
 }
 
 NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth);
@@ -48,7 +48,12 @@ NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth){
     }
     return lie;
 }
-NSArray *retRectArrayFor(NSArray* _lieInfo,NSArray* _lengInfo,float widthAdd,float hAdd,float buttonH){
+
+NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAdd,float hAdd,float buttonH);
+NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAdd,float hAdd,float buttonH){
+
+    NSArray* _lengInfo = stringLengthArrayFor(_data,aFontSize);
+    NSArray* _lieInfo = lieInfoFor(_lengInfo, maxW);
 
     int widthadd = widthAdd;
     int hadd = hAdd;
@@ -62,7 +67,6 @@ NSArray *retRectArrayFor(NSArray* _lieInfo,NSArray* _lengInfo,float widthAdd,flo
         
         for (int j = chushi; j<end; j++) {
             NSNumber *wwww = _lengInfo[j];
-            
             /*添加button Frame*/
             CGRect fra = CGRectMake((j-chushi)*widthadd, hadd*i, wwww.floatValue, buH);
             [cgrectArray addObject:[NSValue valueWithCGRect:fra]];
@@ -70,6 +74,7 @@ NSArray *retRectArrayFor(NSArray* _lieInfo,NSArray* _lengInfo,float widthAdd,flo
     }
     return cgrectArray;
 }
+
 
 
 @interface YKViewController ()
@@ -89,54 +94,9 @@ NSArray *retRectArrayFor(NSArray* _lieInfo,NSArray* _lengInfo,float widthAdd,flo
     for (int i=0; i<10; i++) {
         [data addObject:s];
     }
-    NSLog(@"%@",data);
-    NSMutableArray *lengthArray = [NSMutableArray array];;
-    
-    for (int i=0; i<data.count; i++) {
-        NSString *obj =     data[i];
-        float len = getTextSizeWidth(obj, 14)+10;
-        [lengthArray addObject:[NSNumber numberWithFloat:len]];
-    }
-    
-    float total = 0;
-    NSMutableArray *lie = [NSMutableArray array];
-    [lie addObject:[NSNumber numberWithInt:0]];
-    int tempTotal = 0;
-    for (int i=0; i<lengthArray.count; i++) {
-        NSNumber *num =   lengthArray[i];
-        tempTotal+= num.floatValue;
-        if (tempTotal>320) {
-            /*记下number*/
-            [lie addObject:[NSNumber numberWithInt:i]];
-            tempTotal = num.floatValue;
-        }
-        total  = tempTotal;
-    }
-    if (total!=0) {
-        int lastnumber =  data.count;
-        [lie addObject:[NSNumber numberWithInt:lastnumber]];
-    }
+    NSArray *cgrectArray = retRectArrayFor(data, 14, 320, 60, 60, 44);
+    NSLog(@"%@",cgrectArray);
 
-    int widthadd = 64;
-    int hadd = 80;
-    int buH = 44;
-    NSMutableArray *cgrectArray = [NSMutableArray array];
-    for (int i=0; i<lie.count-1; i++) {
-        NSNumber *obj = lie[i];
-        int chushi = obj.intValue;
-        obj = lie[i+1];
-        int end = obj.intValue;
-        
-        for (int j = chushi; j<end; j++) {
-            NSNumber *wwww = lengthArray[j];
-            
-            /*添加button*/
-            CGRect fra = CGRectMake((j-chushi)*widthadd, hadd*i, wwww.floatValue, buH);
-            [cgrectArray addObject:[NSValue valueWithCGRect:fra]];
-        }
-//        hadd*=i;
-    }
-    NSLog(@"cgr:%@",cgrectArray);
     for (int k=0; k<cgrectArray.count; k++) {
         UIButton *a = [UIButton buttonWithType:UIButtonTypeRoundedRect];
         [a setTitle:data[k] forState:UIControlStateNormal];
