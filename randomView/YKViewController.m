@@ -26,19 +26,19 @@ NSArray *stringLengthArrayFor(NSArray* _arr,float aFontSize){
     return lengthArray;
 }
 
-NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth);
-NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth){
+NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth,float widthAdd);
+NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth,float widthAdd){
     float total = 0;
     NSMutableArray *lie = [NSMutableArray array];
     [lie addObject:[NSNumber numberWithInt:0]];
     int tempTotal = 0;
     for (int i=0; i<_lengInfo.count; i++) {
         NSNumber *num =   _lengInfo[i];
-        tempTotal+= num.floatValue;
+        tempTotal+= (num.floatValue+widthAdd);
         if (tempTotal>maxWidth) {
             /*记下number*/
             [lie addObject:[NSNumber numberWithInt:i]];
-            tempTotal = num.floatValue;
+            tempTotal = (num.floatValue+widthAdd);
         }
         total  = tempTotal;
     }
@@ -53,7 +53,7 @@ NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAd
 NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAdd,float hAdd,float buttonH){
 
     NSArray* _lengInfo = stringLengthArrayFor(_data,aFontSize);
-    NSArray* _lieInfo = lieInfoFor(_lengInfo, maxW);
+    NSArray* _lieInfo = lieInfoFor(_lengInfo, maxW,widthAdd);
 
     int widthadd = widthAdd;
     int hadd = hAdd;
@@ -63,14 +63,18 @@ NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAd
         NSNumber *obj = _lieInfo[i];
         int chushi = obj.intValue;
         obj = _lieInfo[i+1];
+        float dangqianXTotal = 0;
         int end = obj.intValue;
         
         for (int j = chushi; j<end; j++) {
             NSNumber *wwww = _lengInfo[j];
             /*添加button Frame*/
-            CGRect fra = CGRectMake((j-chushi)*widthadd, hadd*i, wwww.floatValue, buH);
+            CGRect fra = CGRectMake(dangqianXTotal+(widthadd*(j-chushi)), hadd*i, wwww.floatValue, buH);
             [cgrectArray addObject:[NSValue valueWithCGRect:fra]];
+            dangqianXTotal+=wwww.floatValue;
+
         }
+        
     }
     return cgrectArray;
 }
@@ -92,9 +96,9 @@ NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAd
     
     NSMutableArray *data = [NSMutableArray array];;
     for (int i=0; i<10; i++) {
-        [data addObject:s];
+        [data addObject:[s substringToIndex:(abs(rand())%(s.length-2)+2)]];
     }
-    NSArray *cgrectArray = retRectArrayFor(data, 14, 320, 60, 60, 44);
+    NSArray *cgrectArray = retRectArrayFor(data, 14, 320, 10, 60, 44);
     NSLog(@"%@",cgrectArray);
 
     for (int k=0; k<cgrectArray.count; k++) {
