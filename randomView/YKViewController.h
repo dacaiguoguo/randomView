@@ -9,5 +9,6 @@
 #import <UIKit/UIKit.h>
 
 @interface YKViewController : UIViewController
+- (IBAction)changRandomView:(id)sender;
 
 @end

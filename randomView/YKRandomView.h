@@ -7,7 +7,11 @@
 //
 
 #import <UIKit/UIKit.h>
-
+@protocol YKRandomViewDataSource<NSObject>
+- (NSArray *)titleArray;
+@end
 @interface YKRandomView : UIView
-
+@property (nonatomic, retain) id<YKRandomViewDataSource> datasource;
+- (id)initWithFrame:(CGRect)frame withDataSource:(id<YKRandomViewDataSource>)datasource_;
+- (void)reloadData;
 @end

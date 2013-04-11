@@ -7,107 +7,31 @@
 //
 
 #import "YKViewController.h"
+#import "YKRandomView.h"
 float getTextSizeWidth(NSString*text ,float aFontSize) ;
-float getTextSizeWidth(NSString*text ,float aFontSize) {
-    NSString *platFormstr = text;
-    CGSize platFormconstraint = CGSizeMake(10000, 10000);
-    CGSize platFormsize =[platFormstr sizeWithFont:[UIFont systemFontOfSize:aFontSize] constrainedToSize:platFormconstraint lineBreakMode: NSLineBreakByCharWrapping ];
-    return platFormsize.width;
-}
-NSArray *stringLengthArrayFor(NSArray* _arr,float aFontSize);
-NSArray *stringLengthArrayFor(NSArray* _arr,float aFontSize){
-    NSMutableArray *lengthArray = [NSMutableArray array];;
-    
-    for (int i=0; i<_arr.count; i++) {
-        NSString *obj = _arr[i];
-        float len = getTextSizeWidth(obj, 14)+10;
-        [lengthArray addObject:[NSNumber numberWithFloat:len]];
-    }
-    return lengthArray;
-}
-
-NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth,float widthAdd);
-NSArray *lieInfoFor(NSArray* _lengInfo,float maxWidth,float widthAdd){
-    float total = 0;
-    NSMutableArray *lie = [NSMutableArray array];
-    [lie addObject:[NSNumber numberWithInt:0]];
-    int tempTotal = 0;
-    for (int i=0; i<_lengInfo.count; i++) {
-        NSNumber *num =   _lengInfo[i];
-        tempTotal+= (num.floatValue+widthAdd);
-        if (tempTotal>maxWidth) {
-            /*记下number*/
-            [lie addObject:[NSNumber numberWithInt:i]];
-            tempTotal = (num.floatValue+widthAdd);
-        }
-        total  = tempTotal;
-    }
-    if (total!=0) {
-        int lastnumber =  _lengInfo.count;
-        [lie addObject:[NSNumber numberWithInt:lastnumber]];
-    }
-    return lie;
-}
-
-NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAdd,float hAdd,float buttonH);
-NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAdd,float hAdd,float buttonH){
-
-    NSArray* _lengInfo = stringLengthArrayFor(_data,aFontSize);
-    NSArray* _lieInfo = lieInfoFor(_lengInfo, maxW,widthAdd);
-
-    int widthadd = widthAdd;
-    int hadd = hAdd;
-    int buH = buttonH;
-    NSMutableArray *cgrectArray = [NSMutableArray array];
-    for (int i=0; i<_lieInfo.count-1; i++) {
-        NSNumber *obj = _lieInfo[i];
-        int chushi = obj.intValue;
-        obj = _lieInfo[i+1];
-        float dangqianXTotal = 0;
-        int end = obj.intValue;
-        
-        for (int j = chushi; j<end; j++) {
-            NSNumber *wwww = _lengInfo[j];
-            /*添加button Frame*/
-            CGRect fra = CGRectMake(dangqianXTotal+(widthadd*(j-chushi)), hadd*i, wwww.floatValue, buH);
-            [cgrectArray addObject:[NSValue valueWithCGRect:fra]];
-            dangqianXTotal+=wwww.floatValue;
-
-        }
-        
-    }
-    return cgrectArray;
-}
 
 
-
-@interface YKViewController ()
-
+@interface YKViewController ()<YKRandomViewDataSource>
+@property (nonatomic, strong) YKRandomView *random;
 @end
 
 @implementation YKViewController
-
+- (NSArray *)titleArray{
+    NSString *s = @"123456789";
+    NSMutableArray *data = [NSMutableArray array];;
+    for (int i=0; i<10; i++) {
+        int randLength = abs(rand())%(s.length-3)+3;
+        assert(randLength>2);
+        [data addObject:[s substringToIndex:randLength]];
+    }
+    return data;
+}
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    NSString *s = @"sfdjfsfdjf";
-    NSLog(@"%0.2f",getTextSizeWidth(s , 14));
-    
-    
-    NSMutableArray *data = [NSMutableArray array];;
-    for (int i=0; i<10; i++) {
-        [data addObject:[s substringToIndex:(abs(rand())%(s.length-2)+2)]];
-    }
-    NSArray *cgrectArray = retRectArrayFor(data, 14, 320, 10, 60, 44);
-    NSLog(@"%@",cgrectArray);
 
-    for (int k=0; k<cgrectArray.count; k++) {
-        UIButton *a = [UIButton buttonWithType:UIButtonTypeRoundedRect];
-        [a setTitle:data[k] forState:UIControlStateNormal];
-        NSValue *val = cgrectArray[k];
-        a.frame = val.CGRectValue;
-        [self.view addSubview:a];
-    }
+    self.random = [[YKRandomView alloc] initWithFrame:CGRectMake(0, 0, 320, 300) withDataSource:self];
+    [self.view addSubview:_random];
 	// Do any additional setup after loading the view, typically from a nib.
 }
 
@@ -117,4 +41,7 @@ NSArray *retRectArrayFor(NSArray* _data,float aFontSize,float maxW,float widthAd
     // Dispose of any resources that can be recreated.
 }
 
+- (IBAction)changRandomView:(id)sender {
+    [_random reloadData];
+}
 @end
