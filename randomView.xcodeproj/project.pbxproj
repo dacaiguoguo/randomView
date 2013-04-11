@@ -23,6 +23,7 @@
 		590562E91713B5A9002F8A79 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 590562C41713B5A8002F8A79 /* Foundation.framework */; };
 		590562F11713B5A9002F8A79 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 590562EF1713B5A9002F8A79 /* InfoPlist.strings */; };
 		590562F41713B5A9002F8A79 /* randomViewTests.m in Sources */ = {isa = PBXBuildFile; fileRef = 590562F31713B5A9002F8A79 /* randomViewTests.m */; };
+		5960AA9A17164CA800932E78 /* YKRandomView.m in Sources */ = {isa = PBXBuildFile; fileRef = 5960AA9917164CA800932E78 /* YKRandomView.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -58,6 +59,8 @@
 		590562F01713B5A9002F8A79 /* en */ = {isa = PBXFileReference; lastKnownFileType = text.plist.strings; name = en; path = en.lproj/InfoPlist.strings; sourceTree = "<group>"; };
 		590562F21713B5A9002F8A79 /* randomViewTests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = randomViewTests.h; sourceTree = "<group>"; };
 		590562F31713B5A9002F8A79 /* randomViewTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = randomViewTests.m; sourceTree = "<group>"; };
+		5960AA9817164CA800932E78 /* YKRandomView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = YKRandomView.h; sourceTree = "<group>"; };
+		5960AA9917164CA800932E78 /* YKRandomView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = YKRandomView.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -121,6 +124,8 @@
 				590562D21713B5A8002F8A79 /* YKAppDelegate.m */,
 				590562DA1713B5A8002F8A79 /* YKViewController.h */,
 				590562DB1713B5A8002F8A79 /* YKViewController.m */,
+				5960AA9817164CA800932E78 /* YKRandomView.h */,
+				5960AA9917164CA800932E78 /* YKRandomView.m */,
 				590562DD1713B5A9002F8A79 /* YKViewController.xib */,
 				590562C91713B5A8002F8A79 /* Supporting Files */,
 			);
@@ -274,6 +279,7 @@
 				590562CF1713B5A8002F8A79 /* main.m in Sources */,
 				590562D31713B5A8002F8A79 /* YKAppDelegate.m in Sources */,
 				590562DC1713B5A8002F8A79 /* YKViewController.m in Sources */,
+				5960AA9A17164CA800932E78 /* YKRandomView.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -384,6 +390,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "randomView/randomView-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "randomView/randomView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -395,6 +402,7 @@
 			buildSettings = {
 				GCC_PRECOMPILE_PREFIX_HEADER = YES;
 				GCC_PREFIX_HEADER = "randomView/randomView-Prefix.pch";
+				GCC_VERSION = com.apple.compilers.llvm.clang.1_0;
 				INFOPLIST_FILE = "randomView/randomView-Info.plist";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				WRAPPER_EXTENSION = app;
@@ -454,6 +462,7 @@
 				590562F91713B5A9002F8A79 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		590562FA1713B5A9002F8A79 /* Build configuration list for PBXNativeTarget "randomViewTests" */ = {
 			isa = XCConfigurationList;
@@ -462,6 +471,7 @@
 				590562FC1713B5A9002F8A79 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};
